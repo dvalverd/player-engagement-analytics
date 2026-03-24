@@ -1,0 +1,11 @@
+game_key,game_name,genre,platform_tags,esrb_rating,rawg_rating,metacritic_score,avg_playtime_hrs,price_usd,positive_reviews,negative_reviews,players_2weeks,released,review_sentiment,primary_genre
+1,Grand Theft Auto V,"Action, Adventure","PC, PS5, Xbox Series X",Mature,4.47,97,73,29.99,1042000,56000,85000,2013-09-17,94.9,Action
+2,The Witcher 3: Wild Hunt,"RPG, Adventure","PC, PS5, Xbox Series X, Nintendo Switch",Mature,4.67,93,102,39.99,412000,8500,42000,2015-05-18,98.0,RPG
+3,Cyberpunk 2077,"RPG, Action","PC, PS5, Xbox Series X",Mature,4.12,86,61,59.99,390000,62000,55000,2020-12-10,86.3,RPG
+4,Elden Ring,"RPG, Action","PC, PS5, Xbox Series X",Mature,4.65,96,58,59.99,375000,21000,38000,2022-02-25,94.7,RPG
+5,Red Dead Redemption 2,"Action, Adventure","PC, PS5, Xbox Series X",Mature,4.59,97,75,0.0,0,0,0,2019-11-05,0.0,Action
+6,Hades,"Action, Indie, RPG","PC, Nintendo Switch",Teen,4.54,93,29,24.99,175000,3200,18000,2020-09-17,98.2,Action
+7,Stardew Valley,"Simulation, RPG, Indie","PC, PS5, Xbox Series X, Nintendo Switch",Everyone,4.56,89,58,14.99,410000,6200,28000,2016-02-26,98.5,Simulation
+8,Among Us,"Casual, Indie","PC, Nintendo Switch",Everyone 10+,3.84,85,12,0.0,0,0,0,2018-11-16,0.0,Casual
+9,Counter-Strike 2,"Action, Shooter",PC,Mature,3.97,83,324,0.0,2100000,580000,950000,2012-08-21,78.4,Action
+10,Apex Legends,"Action, Shooter","PC, PS5, Xbox Series X",Teen,4.13,88,98,0.0,580000,95000,320000,2019-02-04,85.9,Action

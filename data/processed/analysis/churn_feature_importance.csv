@@ -1,0 +1,8 @@
+feature,coefficient,abs_importance
+days_active,-3.0103,3.0103
+total_sessions,-0.7817,0.7817
+total_purchases,-0.6762,0.6762
+player_type_enc,-0.6654,0.6654
+total_playtime_hrs,0.6325,0.6325
+avg_session_mins,0.4991,0.4991
+total_spent_usd,0.0191,0.0191

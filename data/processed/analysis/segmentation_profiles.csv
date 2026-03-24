@@ -1,0 +1,5 @@
+cluster,total_sessions,avg_session_mins,total_playtime_hrs,total_purchases,total_spent_usd,days_active,is_churned,segment_label
+0,40.53,82.4,57.22,2.24,42.02,57.44,0.59,Casual browsers
+1,115.98,196.91,380.3,10.32,346.81,68.64,0.3,Casual browsers
+2,6.31,52.68,6.26,0.23,3.17,12.04,1.0,At-risk players
+3,152.15,194.48,492.69,19.08,698.53,80.92,0.0,Power players

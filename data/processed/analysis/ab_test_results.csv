@@ -1,0 +1,2 @@
+metric,control_mean,treatment_mean,lift_pct,control_n,treatment_n,t_statistic,p_value,statistically_significant,cohens_d,effect_size_label
+session_duration_mins,135.51,156.78,15.69,7009,7108,15.4472,0.0,True,0.2601,small

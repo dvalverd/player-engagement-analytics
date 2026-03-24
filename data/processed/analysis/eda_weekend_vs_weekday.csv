@@ -1,0 +1,3 @@
+is_weekend,sessions,avg_duration_mins,unique_players
+False,10124,137.7,426
+True,3993,137.9,365

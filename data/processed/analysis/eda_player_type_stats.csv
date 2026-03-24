@@ -1,0 +1,4 @@
+player_type,players,avg_session_mins,total_sessions,sessions_per_player
+hardcore,66,196.2,7317,110.9
+regular,177,82.5,5592,31.6
+casual,197,39.6,1208,6.1

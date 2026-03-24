@@ -1,0 +1,11 @@
+game_id,slug,name,released,rating,ratings_count,metacritic,playtime_avg_hrs,genres,platforms,esrb_rating
+1,grand-theft-auto-v,Grand Theft Auto V,2013-09-17,4.47,6823,97,73,"Action, Adventure","PC, PS5, Xbox Series X",Mature
+2,the-witcher-3-wild-hunt,The Witcher 3: Wild Hunt,2015-05-18,4.67,5921,93,102,"RPG, Adventure","PC, PS5, Xbox Series X, Nintendo Switch",Mature
+3,cyberpunk-2077,Cyberpunk 2077,2020-12-10,4.12,4102,86,61,"RPG, Action","PC, PS5, Xbox Series X",Mature
+4,elden-ring,Elden Ring,2022-02-25,4.65,3841,96,58,"RPG, Action","PC, PS5, Xbox Series X",Mature
+5,red-dead-redemption-2,Red Dead Redemption 2,2019-11-05,4.59,4512,97,75,"Action, Adventure","PC, PS5, Xbox Series X",Mature
+6,hades,Hades,2020-09-17,4.54,2901,93,29,"Action, Indie, RPG","PC, Nintendo Switch",Teen
+7,stardew-valley,Stardew Valley,2016-02-26,4.56,3712,89,58,"Simulation, RPG, Indie","PC, PS5, Xbox Series X, Nintendo Switch",Everyone
+8,among-us,Among Us,2018-11-16,3.84,2145,85,12,"Casual, Indie","PC, Nintendo Switch",Everyone 10+
+9,counter-strike-global-offensive,Counter-Strike 2,2012-08-21,3.97,5301,83,324,"Action, Shooter",PC,Mature
+10,apex-legends,Apex Legends,2019-02-04,4.13,3201,88,98,"Action, Shooter","PC, PS5, Xbox Series X",Teen
