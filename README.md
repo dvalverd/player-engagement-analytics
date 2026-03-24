@@ -8,7 +8,7 @@ in data engineering, statistical analysis, machine learning, and visualization.
 
 ## Live Dashboard
 
-**[View Interactive Dashboard →](https://dvalverd.github.io/player-engagement-analytics/dashboard.html)**
+**[View Interactive Dashboard →](https://dvalverd.github.io/player-engagement-analytics/)**
 
 
 
