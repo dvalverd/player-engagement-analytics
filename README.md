@@ -4,12 +4,8 @@ An end-to-end data analytics project simulating a real-world player engagement
 analytics workflow for a PC/console gaming platform. Built to demonstrate skills
 in data engineering, statistical analysis, machine learning, and visualization.
 
----
 
-## Live Dashboard
-
-**[View Interactive Dashboard →](https://dvalverd.github.io/player-engagement-analytics/)**
-
+<kbd>[▸ Live Demo — github.io/player-engagement-analytics](https://dvalverd.github.io/player-engagement-analytics/)</kbd>
 
 ## Project Structure
 
