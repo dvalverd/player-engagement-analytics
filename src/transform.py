@@ -1,11 +1,4 @@
 
-#Stage 2: ETL Pipeline & Data Warehouse
-#Reads raw CSVs from data/raw/, cleans and transforms them,
-#then loads into a DuckDB warehouse modeled as a star schema.
-
-
-
-
 import duckdb
 import pandas as pd
 import numpy as np
@@ -17,8 +10,6 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 DB_PATH = PROCESSED_DIR / "warehouse.duckdb"
 
 
-
-# Static fallback data (used when APIs failed)
 
 STATIC_GAMES = pd.DataFrame([
     {"game_id":1,"name":"Grand Theft Auto V","released":"2013-09-17","rating":4.47,"ratings_count":6823,"metacritic":97,"playtime_avg_hrs":73,"genres":"Action, Adventure","platforms":"PC, PS5","esrb_rating":"Mature"},
@@ -48,9 +39,6 @@ STATIC_STEAMSPY = pd.DataFrame([
 
 
 
-# Extract
-
-
 def extract():
     print("Extracting raw data...")
     events = pd.read_csv(RAW_DIR / "player_events.csv", parse_dates=["timestamp"])
@@ -77,7 +65,6 @@ def extract():
     return events, games, steamspy
 
 
-# Transform
 
 
 def build_dim_games(games, steamspy):
@@ -193,7 +180,6 @@ def build_dim_date(fact):
 
 
 
-# Load into DuckDB
 
 
 def load_to_warehouse(fact_sessions, dim_players, dim_games, dim_date):
@@ -229,9 +215,6 @@ def load_to_warehouse(fact_sessions, dim_players, dim_games, dim_date):
 
 
 
-# Save processed CSVs
-
-
 def save_processed(fact, dim_players, dim_games, dim_date):
     fact.to_csv(PROCESSED_DIR / "fact_sessions.csv", index=False)
     dim_players.to_csv(PROCESSED_DIR / "dim_players.csv", index=False)
@@ -240,8 +223,6 @@ def save_processed(fact, dim_players, dim_games, dim_date):
     print(f"\n  CSVs saved to {PROCESSED_DIR}")
 
 
-
-# Main
 
 
 def run_transform():

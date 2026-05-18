@@ -1,7 +1,4 @@
 
-#Stage 4: Visualizations
-
-
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -12,7 +9,6 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 
-# Load
 
 def load_data() -> dict:
     return {
@@ -28,11 +24,10 @@ def load_data() -> dict:
 
 
 
-# Helpers
 
 
 def jlist(series) -> str:
-    """Serialise a pandas series to a JS array literal."""
+
     parts = []
     for v in series:
         if isinstance(v, str):
@@ -43,7 +38,7 @@ def jlist(series) -> str:
             parts.append(str(round(float(v), 2)))
     return "[" + ",".join(parts) + "]"
 
-# Build HTML dashboard
+
 
 
 def build_dashboard(data: dict) -> str:
@@ -58,7 +53,7 @@ def build_dashboard(data: dict) -> str:
 
     dau["dau_7d"] = dau["dau"].rolling(7, min_periods=1).mean().round(1)
 
-    # JS data
+   
     dau_labels  = jlist(dau["date"].dt.strftime("%b %d"))
     dau_vals    = jlist(dau["dau"])
     dau_rolling = jlist(dau["dau_7d"])
@@ -82,7 +77,7 @@ def build_dashboard(data: dict) -> str:
     pt_labels    = jlist(pt["player_type"].str.capitalize())
     pt_counts    = jlist(pt["players"])
 
-    # Region rows
+
     max_players = regional["players"].max()
     region_rows = ""
     for _, r in regional.iterrows():
@@ -94,7 +89,7 @@ def build_dashboard(data: dict) -> str:
             f'<td><div class="rmbar" style="width:{bar_w}%"></div></td></tr>'
         )
 
-    # Churn predictor rows
+
     max_abs = churn["abs_importance"].max()
     churn_rows = ""
     for _, r in churn.head(6).iterrows():
@@ -273,8 +268,6 @@ new Chart(document.getElementById('types'),{{type:'doughnut',data:{{labels:{pt_l
     return html
 
 
-# Data story
-
 
 def write_data_story(data: dict):
     import datetime
@@ -397,7 +390,7 @@ A simulated experiment testing whether a Daily Rewards feature increases session
 
 
 
-# Main
+
 
 
 def run_visualize():

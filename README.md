@@ -11,13 +11,6 @@ in data engineering, statistical analysis, machine learning, and visualization.
 **[View Interactive Dashboard →](https://dvalverd.github.io/player-engagement-analytics/)**
 
 
-
-## Dashboard Preview
-
-![Dashboard Preview](dashboard_preview.png)
-
----
-
 ## Project Structure
 
 ```

@@ -1,6 +1,5 @@
 # Player Engagement Analytics — Data Story
 
-
 ## Project Overview
 End-to-end analytics pipeline tracking **440 players** across a PC/console gaming
 platform over 90 days. Covers data ingestion, ETL, statistical testing, machine learning,

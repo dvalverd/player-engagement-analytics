@@ -1,12 +1,3 @@
-#Stage 3 Analysis
-
-"""
-  1. EDA              — engagement trends, retention, playtime distributions
-  2. A/B test sim     — hypothesis testing on a feature experiment
-  3. Churn model      — logistic regression churn prediction
-  4. Segmentation     — K-means player clustering
-
-"""
 
 import duckdb
 import pandas as pd
@@ -32,7 +23,6 @@ def get_con():
 
 
 
-# Data Analysis
 
 
 def run_eda() -> dict[str, pd.DataFrame]:
@@ -40,7 +30,7 @@ def run_eda() -> dict[str, pd.DataFrame]:
     con = get_con()
     results = {}
 
-    # Daily active players
+
     results["dau"] = con.execute("""
         SELECT date,
                COUNT(DISTINCT player_key) AS dau,
@@ -52,7 +42,7 @@ def run_eda() -> dict[str, pd.DataFrame]:
         ORDER BY date
     """).fetchdf()
 
-    # Engagement by game
+
     results["game_engagement"] = con.execute("""
         SELECT g.game_name,
                g.primary_genre,
@@ -67,7 +57,6 @@ def run_eda() -> dict[str, pd.DataFrame]:
         ORDER BY unique_players DESC
     """).fetchdf()
 
-    # Engagement by player type
     results["player_type_stats"] = con.execute("""
         SELECT player_type,
                COUNT(DISTINCT player_key) AS players,
@@ -79,7 +68,7 @@ def run_eda() -> dict[str, pd.DataFrame]:
         ORDER BY avg_session_mins DESC
     """).fetchdf()
 
-    # Sessions by hour of day
+
     results["hourly_pattern"] = con.execute("""
         SELECT hour,
                COUNT(*) AS sessions,
@@ -89,7 +78,7 @@ def run_eda() -> dict[str, pd.DataFrame]:
         ORDER BY hour
     """).fetchdf()
 
-    # Regional breakdown
+ 
     results["regional"] = con.execute("""
         SELECT region,
                COUNT(DISTINCT player_key) AS players,
@@ -100,7 +89,6 @@ def run_eda() -> dict[str, pd.DataFrame]:
         ORDER BY players DESC
     """).fetchdf()
 
-    # Weekend vs weekday
     results["weekend_vs_weekday"] = con.execute("""
         SELECT is_weekend,
                COUNT(*) AS sessions,
@@ -124,9 +112,6 @@ def run_eda() -> dict[str, pd.DataFrame]:
 
 
 
-# 2. A/B Test 
-
-
 def run_ab_test() -> pd.DataFrame:
     
     print("\n── A/B Test ─")
@@ -140,14 +125,14 @@ def run_ab_test() -> pd.DataFrame:
 
     rng = np.random.default_rng(42)
 
-    # Randomly assign players to groups (50/50 split)
+
     player_ids = sessions["player_key"].unique()
     treatment_ids = set(rng.choice(player_ids, size=len(player_ids) // 2, replace=False))
     sessions["group"] = sessions["player_key"].apply(
         lambda x: "treatment" if x in treatment_ids else "control"
     )
 
-    # Treatment effect: Daily Rewards boosts session duration by ~12% with noise
+
     treatment_mask = sessions["group"] == "treatment"
     boost = rng.normal(loc=0.12, scale=0.04, size=treatment_mask.sum())
     sessions.loc[treatment_mask, "duration_mins"] = (
@@ -159,7 +144,7 @@ def run_ab_test() -> pd.DataFrame:
 
     t_stat, p_value = stats.ttest_ind(treatment, control)
 
-    # Cohen's d effect size
+
     pooled_std = np.sqrt((control.std() ** 2 + treatment.std() ** 2) / 2)
     cohens_d = (treatment.mean() - control.mean()) / pooled_std
 
@@ -186,7 +171,7 @@ def run_ab_test() -> pd.DataFrame:
     print(f"  Significant:    {results['statistically_significant'].iloc[0]}")
     print(f"  Cohen's d:      {results['cohens_d'].iloc[0]} ({results['effect_size_label'].iloc[0]})")
 
-    # Also save group-level summary for visualization
+
     group_summary = sessions.groupby("group")["duration_mins"].agg(
         ["mean", "std", "count", "median"]
     ).reset_index()
@@ -196,14 +181,10 @@ def run_ab_test() -> pd.DataFrame:
 
 
 
-#  Churn Prediction Model
 
 
 def run_churn_model() -> dict:
-    """
-    Predict churn using logistic regression on player behavior features.
-    Features: total sessions, avg session length, total spend, days active, player type.
-    """
+  
     print("\n Churn Model ")
 
     dim_players = pd.read_csv(PROCESSED_DIR / "dim_players.csv")
@@ -245,7 +226,7 @@ def run_churn_model() -> dict:
     print(f"\n  Classification report:")
     print(classification_report(y_test, y_pred, target_names=["retained", "churned"]))
 
-    # Feature importance
+
     importance = pd.DataFrame({
         "feature":    features,
         "coefficient": model.coef_[0].round(4),
@@ -253,7 +234,7 @@ def run_churn_model() -> dict:
     }).sort_values("abs_importance", ascending=False)
     importance.to_csv(ANALYSIS_DIR / "churn_feature_importance.csv", index=False)
 
-    # Churn probability per player
+
     all_probs = model.predict_proba(scaler.transform(X.fillna(0)))[:, 1]
     dim_players["churn_probability"] = all_probs.round(4)
     dim_players["churn_risk"] = pd.cut(
@@ -275,8 +256,6 @@ def run_churn_model() -> dict:
 
 
 
-#  (K-Means)
-
 
 def run_segmentation() -> pd.DataFrame:
 
@@ -297,7 +276,6 @@ def run_segmentation() -> pd.DataFrame:
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # Find optimal k using inertia (elbow method)
     inertias = []
     k_range = range(2, 9)
     for k in k_range:
@@ -308,12 +286,12 @@ def run_segmentation() -> pd.DataFrame:
     elbow_df = pd.DataFrame(inertias)
     elbow_df.to_csv(ANALYSIS_DIR / "segmentation_elbow.csv", index=False)
 
-    # Fit with k=4 (good balance for player analytics)
+
     K = 4
     km = KMeans(n_clusters=K, random_state=42, n_init=10)
     dim_players["cluster"] = km.fit_predict(X_scaled)
 
-    # Cluster profiles
+
     profile = dim_players.groupby("cluster")[seg_features + ["is_churned"]].agg({
         "total_sessions":    "mean",
         "avg_session_mins":  "mean",
@@ -324,13 +302,13 @@ def run_segmentation() -> pd.DataFrame:
         "is_churned":        "mean",
     }).round(2).reset_index()
 
-    # Label clusters meaningfully
+
     labels = {
         profile["total_spent_usd"].idxmax():       "High spenders",
         profile["total_sessions"].idxmax():        "Power players",
         profile["is_churned"].idxmax():            "At-risk players",
     }
-    # Remaining cluster = casual browsers
+
     remaining = [i for i in range(K) if i not in labels]
     if remaining:
         labels[remaining[0]] = "Casual browsers"
@@ -339,7 +317,7 @@ def run_segmentation() -> pd.DataFrame:
 
     profile.to_csv(ANALYSIS_DIR / "segmentation_profiles.csv", index=False)
 
-    # Save player-level cluster assignments
+
     dim_players["segment_label"] = dim_players["cluster"].map(labels).fillna("Casual browsers")
     dim_players[["player_id", "player_type", "cluster", "segment_label",
                  "total_sessions", "total_spent_usd", "is_churned"]].to_csv(
@@ -352,9 +330,6 @@ def run_segmentation() -> pd.DataFrame:
 
     return profile
 
-
-
-# Main runner
 
 
 def run_analysis():

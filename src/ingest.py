@@ -1,12 +1,4 @@
 
-#Stage 1: Data Ingestion
-
-#sources:
-# 1. RAWG API       — game metadata (genre, rating, platform, release date)
-#  2. Steam Spy API  — player count & ownership estimates 
-#  3. Simulated      — player session events (logins, playtime, purchases, churn)
-
-
 
 import os
 import time
@@ -21,9 +13,6 @@ RAW_DIR = Path(__file__).parent.parent / "data" / "raw"
 RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 RAWG_API_KEY = os.getenv("RAWG_API_KEY", "")  # Free key at rawg.io — opt
-
-
-# 1. RAWG API 
 
 
 RAWG_GAME_IDS = [
@@ -51,7 +40,7 @@ RAWG_GAME_IDS = [
 
 
 def fetch_rawg_games(game_slugs: list[str]) -> pd.DataFrame:
-    """Fetch game metadata from RAWG API (free tier, no key needed for baase"""
+
     print("Fetching RAWG game metadata...")
     records = []
 
@@ -84,7 +73,7 @@ def fetch_rawg_games(game_slugs: list[str]) -> pd.DataFrame:
                 print(f" {slug} — status {resp.status_code}")
         except Exception as e:
             print(f"   {slug} — error: {e}")
-        time.sleep(0.5)  # Respect rate limits
+        time.sleep(0.5)  
 
     df = pd.DataFrame(records)
     out = RAW_DIR / "rawg_games.csv"
@@ -94,10 +83,6 @@ def fetch_rawg_games(game_slugs: list[str]) -> pd.DataFrame:
 
 
 
-# 2. Steam Spy API  Player Count Estimates
-
-
-# Steam App IDs mapped to game names
 STEAM_APP_IDS = {
     271590: "Grand Theft Auto V",
     292030: "The Witcher 3: Wild Hunt",
@@ -159,8 +144,6 @@ def fetch_steamspy_stats(app_ids: dict[int, str]) -> pd.DataFrame:
 
 
 
-# Simulated Player Events
-
 
 GAME_POOL = [
     "Grand Theft Auto V",
@@ -187,22 +170,14 @@ def simulate_player_events(
     n_days: int = 90,
     seed: int = 42,
 ) -> pd.DataFrame:
-    """
-    Generate realistic synthetic player event logs.
-
-    Each player has:
-      -# A preferred game and platform
-      - A session frequency (casual / regular / hardcore)
-      - A churn probability (used to simulate drop-off over time)
-      - A spending propensity (determines purchase frequency)
-    """
+  #synthetic player logs
     print(f"Simulating {n_players} players over {n_days} days...")
     rng = np.random.default_rng(seed)
     random.seed(seed)
 
     start_date = datetime.now() - timedelta(days=n_days)
 
-    # ── Player profiles
+
     player_types = rng.choice(
         ["casual", "regular", "hardcore"],
         size=n_players,
@@ -231,7 +206,7 @@ def simulate_player_events(
         region = rng.choice(
             REGIONS, p=[0.35, 0.30, 0.20, 0.10, 0.05]
         )
-        signup_day = rng.integers(0, n_days // 3)  # Players joined at different times
+        signup_day = rng.integers(0, n_days // 3)  
 
         churned = False
         churn_day = None
@@ -240,7 +215,7 @@ def simulate_player_events(
             if churned:
                 break
 
-            # Churn check — increases slightly over time for casual players
+
             time_factor = 1 + (day / n_days) * (0.5 if ptype == "casual" else 0.1)
             if rng.random() < churn_prob[ptype] * time_factor:
                 churned = True
@@ -261,7 +236,7 @@ def simulate_player_events(
                 )
                 break
 
-            # Session events this day
+
             weekly_rate = sessions_per_week[ptype]
             n_sessions_today = rng.poisson(weekly_rate / 7)
 
@@ -271,7 +246,7 @@ def simulate_player_events(
                 dur_min, dur_max = session_duration[ptype]
                 duration = int(rng.integers(dur_min, dur_max))
 
-                # Session start
+      
                 records.append(
                     {
                         "player_id": pid,
@@ -287,7 +262,7 @@ def simulate_player_events(
                     }
                 )
 
-                # Occasional achievement
+        
                 if rng.random() < 0.15:
                     records.append(
                         {
@@ -304,7 +279,7 @@ def simulate_player_events(
                         }
                     )
 
-                # Purchase event
+      
                 if rng.random() < spend_prob[ptype]:
                     lo, hi = spend_amount[ptype]
                     amount = round(rng.uniform(lo, hi), 2)
@@ -334,15 +309,12 @@ def simulate_player_events(
 
 
 
-# Main run
-
-
 def run_ingestion(
     fetch_apis: bool = True,
     n_players: int = 500,
     n_days: int = 90,
 ):
-    """Run the full ingestion pipeline."""
+ 
     print("=" * 55)
     print("  Player Engagement Analytics — Stage 1: Ingest")
     print("=" * 55 + "\n")
@@ -366,7 +338,7 @@ def run_ingestion(
     return results
 
 
-# 4. Static Fallback Data (used when APIs unavailable)
+
 
 
 def generate_static_game_metadata() -> pd.DataFrame:
